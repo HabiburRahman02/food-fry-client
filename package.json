@@ -18,7 +18,9 @@
     "match-sorter": "^8.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-rating-stars-component": "^2.2.0",
     "react-router-dom": "^7.1.1",
+    "react-stars": "^2.2.5",
     "simple-parallax-js": "^6.0.1",
     "sort-by": "^1.2.0",
     "swiper": "^11.1.15"
