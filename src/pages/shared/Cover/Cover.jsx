@@ -2,7 +2,7 @@
 const Cover = ({ img, title }) => {
     return (
         <div
-            className="hero h-[400px] md:h-[650px] "
+            className="hero h-[400px] md:h-[650px] mb-12"
             style={{
                 backgroundImage: `url("${img}")`,
             }}>
