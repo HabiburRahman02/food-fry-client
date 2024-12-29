@@ -23,13 +23,13 @@ const Banner = () => {
             }}
             pagination={{ clickable: true }}
             loop={true}
-            className="mySwiper mb-6"
+            className="mySwiper mb-6 h-[650px]"
         >
             <SwiperSlide>
-                <img src={banner1} alt="" />
+                <img src={banner2} alt="" />
             </SwiperSlide>
             <SwiperSlide>
-                <img src={banner2} alt="" />
+                <img src={banner1} alt="" />
             </SwiperSlide>
             <SwiperSlide>
                 <img src={banner3} alt="" />
