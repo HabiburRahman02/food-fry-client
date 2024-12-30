@@ -21,7 +21,14 @@ const Testimonials = () => {
             effect={'coverflow'}
             // grabCursor={true}
             centeredSlides={true}
-            slidesPerView={2}
+            breakpoints={{
+                640: {
+                    slidesPerView: 1,
+                },
+                1024: {
+                    slidesPerView: 2,
+                },
+            }}
             coverflowEffect={{
                 rotate: 50,
                 stretch: 100,
@@ -30,7 +37,7 @@ const Testimonials = () => {
                 slideShadows: true,
             }}
             autoplay={{
-                delay: 1000
+                delay: 3000
             }}
             pagination={true}
             loop={true}
@@ -47,8 +54,8 @@ const Testimonials = () => {
                             size={40}
                             color1="#42adf5"
                         />
-                        <p className="py-8">{review.details}</p>
-                        <h3 className="text-2xl text-orange-400">{review.name}</h3>
+                        <p className="py-4">{review.details}</p>
+                        <h3 className="text-2xl text-orange-600 font-medium">{review.name}</h3>
                     </div>
                 </SwiperSlide>)
             }
