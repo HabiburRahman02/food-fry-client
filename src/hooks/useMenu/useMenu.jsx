@@ -7,7 +7,7 @@ const useMenu = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('menu.json')
+        axios.get('../menu.json')
             .then(data => {
                 setMenu(data.data);
                 setLoading(false)

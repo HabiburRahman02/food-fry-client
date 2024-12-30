@@ -25,10 +25,10 @@ const Menu = () => {
             ></SectionTitle>
             <MenuCategory items={offered}></MenuCategory>
 
-            <MenuCategory items={desserts} img={dessertImg} title='Desserts'></MenuCategory>
-            <MenuCategory items={pizza} img={pizzaImg} title='Pizzas'></MenuCategory>
-            <MenuCategory items={salad} img={saladImg} title='Salads'></MenuCategory>
-            <MenuCategory items={soup} img={soupImg} title='Soups'></MenuCategory>
+            <MenuCategory items={desserts} img={dessertImg} title='desserts'></MenuCategory>
+            <MenuCategory items={pizza} img={pizzaImg} title='pizza'></MenuCategory>
+            <MenuCategory items={salad} img={saladImg} title='salad'></MenuCategory>
+            <MenuCategory items={soup} img={soupImg} title='soup'></MenuCategory>
 
 
         </div>
