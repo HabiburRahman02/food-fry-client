@@ -1,11 +1,19 @@
 import { NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useMenu/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-    const { user } = useAuth();
-
+    const { user, logOut } = useAuth();
     const handleLogOut = () => {
+        logOut()
+            .then(result => {
+                console.log(result.user);
+                Swal.fire("Logout user success!");
 
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
     const links = <>
         <li><NavLink to='/'>Home</NavLink></li>
@@ -43,13 +51,18 @@ const Navbar = () => {
                     {links}
                 </ul>
             </div>
-            {
-                user ? <>
-                    <button onClick={handleLogOut}>Logout</button>
-                </> : <>
-                    <li><NavLink to='/login'>Login</NavLink></li>
-                </>
-            }
+            <div className="navbar-end">
+                {
+                    user ? <>
+                        <button
+                            onClick={handleLogOut}
+                            className="btn"
+                        >Logout</button>
+                    </> : <>
+                        <NavLink to='/login' className='btn'>Login</NavLink>
+                    </>
+                }
+            </div>
         </div>
     );
 };
