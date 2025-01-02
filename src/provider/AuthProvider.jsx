@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.init";
 
@@ -20,6 +20,14 @@ const AuthProvider = ({ children }) => {
     const logOut = () => {
         setLoading(true)
         return signOut(auth)
+    }
+
+    const updateUserProfile = (name, photo) => {
+        setLoading(true);
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photo
+        })
     }
 
     const googleLogin = () => {
@@ -44,6 +52,7 @@ const AuthProvider = ({ children }) => {
         createUser,
         loginUser,
         googleLogin,
+        updateUserProfile,
         logOut
     }
     return (

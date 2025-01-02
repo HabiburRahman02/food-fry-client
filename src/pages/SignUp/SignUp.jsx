@@ -4,9 +4,10 @@ import useAuth from "../../hooks/useMenu/useAuth";
 import Swal from "sweetalert2";
 
 const SignUp = () => {
-    const { createUser } = useAuth();
+    const { createUser, updateUserProfile } = useAuth();
     const location = useLocation()
     const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
@@ -16,10 +17,17 @@ const SignUp = () => {
 
     const onSubmit = data => {
         createUser(data.email, data.password)
-            .then(result => {
-                console.log(result.user);
+            .then(() => {
                 Swal.fire("Create user success!");
                 navigate(location.state || '/')
+                // update user profile
+                updateUserProfile(data.name, data.photoUrl)
+                    .then(() => {
+                        console.log('profile updated');
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
             .catch(err => {
                 console.log(err);
