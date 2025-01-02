@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useMenu/useAuth";
 import Swal from "sweetalert2";
+import { MdShoppingCart } from "react-icons/md";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
@@ -19,6 +20,14 @@ const Navbar = () => {
         <li><NavLink to='/'>Home</NavLink></li>
         <li><NavLink to='/menu'>Our Menu</NavLink></li>
         <li><NavLink to='/order/salads'>Order</NavLink></li>
+        <li>
+            <NavLink>
+                <button className="flex items-center gap-2">
+                    <MdShoppingCart></MdShoppingCart>
+                    <div className="badge badge-secondary">+0</div>
+                </button>
+            </NavLink>
+        </li>
     </>
     return (
         <div className="navbar bg-black bg-opacity-15 w-full max-w-7xl text-white fixed z-50">
@@ -40,7 +49,7 @@ const Navbar = () => {
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow">
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 text-black w-52 p-2 shadow">
                         {links}
                     </ul>
                 </div>
@@ -58,6 +67,7 @@ const Navbar = () => {
                             onClick={handleLogOut}
                             className="btn"
                         >Logout</button>
+
                     </> : <>
                         <NavLink to='/login' className='btn'>Login</NavLink>
                     </>
