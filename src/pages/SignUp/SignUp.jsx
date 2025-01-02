@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useMenu/useAuth";
 import Swal from "sweetalert2";
 
 const SignUp = () => {
     const { createUser } = useAuth();
+    const location = useLocation()
     const navigate = useNavigate();
     const {
         register,
@@ -18,7 +19,7 @@ const SignUp = () => {
             .then(result => {
                 console.log(result.user);
                 Swal.fire("Create user success!");
-                navigate('/')
+                navigate(location.state || '/')
             })
             .catch(err => {
                 console.log(err);

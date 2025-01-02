@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import useAuth from '../../hooks/useMenu/useAuth';
 import Swal from 'sweetalert2';
+import SocialLogin from '../shared/SocialLogin/SocialLogin';
 
 const Login = () => {
     const [disabledBtn, setDisabledBtn] = useState(true);
     const captchaRef = useRef();
+    const location = useLocation()
     const navigate = useNavigate();
     const { loginUser } = useAuth();
 
@@ -34,7 +36,7 @@ const Login = () => {
             .then(result => {
                 console.log(result.user);
                 Swal.fire("Login success!");
-                navigate('/')
+                navigate(location.state || '/')
             })
             .catch(err => {
                 console.log(err);
@@ -75,6 +77,7 @@ const Login = () => {
                             {/* disabled={disabledBtn} */}
                             <button className="btn btn-primary">Login</button>
                         </div>
+                        <SocialLogin></SocialLogin>
                         <p><Link to='/signup'>Sign Up</Link></p>
                     </form>
                 </div>
