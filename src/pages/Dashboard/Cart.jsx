@@ -1,11 +1,42 @@
+import { FaTrash } from "react-icons/fa6";
 import SectionTitle from "../../components/SectionTitle";
 import useCart from "../../hooks/useCart";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Cart = () => {
-    const [cart] = useCart();
+    const [cart, refetch] = useCart();
+    const axiosSecure = useAxiosSecure();
     const totalPrice = cart.reduce((prevValue, currentValue) => {
         return prevValue + currentValue.price
     }, 0)
+
+    const handleDelete = id => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/cart/${id}`)
+                    .then(data => {
+                        if (data.data.deletedCount > 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            // load data when delete a item
+                            refetch();
+                        }
+                    })
+            }
+        });
+    }
     return (
         <div>
             <SectionTitle
@@ -31,7 +62,7 @@ const Cart = () => {
                                 <th>Name</th>
                                 <th>Job</th>
                                 <th>Favorite Color</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,20 +81,18 @@ const Cart = () => {
                                                         alt="Avatar Tailwind CSS Component" />
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div className="font-bold">Hart Hagerty</div>
-                                                <div className="text-sm opacity-50">United States</div>
-                                            </div>
                                         </div>
                                     </td>
                                     <td>
-                                        Zemlak, Daniel and Leannon
-                                        <br />
-                                        <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
+                                        {item.name}
                                     </td>
                                     <td>Purple</td>
                                     <th>
-                                        <button className="btn btn-ghost btn-xs">details</button>
+                                        <button
+                                            onClick={() => handleDelete(item._id)}
+                                        >
+                                            <FaTrash className="text-xl text-red-600 hover:text-red-700"></FaTrash>
+                                        </button>
                                     </th>
                                 </tr>)
                             }
