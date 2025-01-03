@@ -7,6 +7,7 @@ import useCart from "../../../hooks/useCart";
 const Navbar = () => {
     const { user, logOut } = useAuth();
     const [cart] = useCart();
+
     const handleLogOut = () => {
         logOut()
             .then(result => {
@@ -18,12 +19,13 @@ const Navbar = () => {
                 console.log(err);
             })
     }
+
     const links = <>
         <li><NavLink to='/'>Home</NavLink></li>
         <li><NavLink to='/menu'>Our Menu</NavLink></li>
         <li><NavLink to='/order/salads'>Order</NavLink></li>
         <li>
-            <NavLink>
+            <NavLink to='dashboard/cart'>
                 <button className="flex items-center gap-2">
                     <MdShoppingCart></MdShoppingCart>
                     <div className="badge badge-secondary">+{cart.length}</div>
