@@ -2,12 +2,14 @@ import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useMenu/useAuth";
 import { useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useCart from "../../../hooks/useCart";
 
 const FoodCard = ({ item }) => {
     const { name, recipe, image, _id, price, category } = item;
     const { user } = useAuth();
     const navigate = useNavigate();
     const axiosSecure = useAxiosSecure();
+    const [, refetch] = useCart();
 
     const handleAddToCart = () => {
         if (user && user?.email) {
@@ -25,11 +27,12 @@ const FoodCard = ({ item }) => {
                 .then(data => {
                     if (data.data.insertedId) {
                         Swal.fire({
-                            text: `${name} added success`,
-                            title: 'Added',
+                            title: `${name} added success`,
                             icon: "success",
                             timer: 1000,
                         })
+                        // load data again
+                        refetch();
                     }
                 })
         }

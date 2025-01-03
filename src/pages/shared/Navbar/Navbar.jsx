@@ -2,9 +2,11 @@ import { NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useMenu/useAuth";
 import Swal from "sweetalert2";
 import { MdShoppingCart } from "react-icons/md";
+import useCart from "../../../hooks/useCart";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
+    const [cart] = useCart();
     const handleLogOut = () => {
         logOut()
             .then(result => {
@@ -24,7 +26,7 @@ const Navbar = () => {
             <NavLink>
                 <button className="flex items-center gap-2">
                     <MdShoppingCart></MdShoppingCart>
-                    <div className="badge badge-secondary">+0</div>
+                    <div className="badge badge-secondary">+{cart.length}</div>
                 </button>
             </NavLink>
         </li>
