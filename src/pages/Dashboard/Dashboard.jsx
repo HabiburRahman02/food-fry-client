@@ -3,7 +3,7 @@ import LeftSideNav from "./LeftSideNav";
 import { useState } from "react";
 
 const Dashboard = () => {
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(false)
     console.log(show);
     return (
         <div className="flex gap-8">

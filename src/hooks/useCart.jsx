@@ -12,7 +12,6 @@ const useCart = () => {
             return data.data;
         }
     })
-    console.log(cart);
     return [cart, refetch]
 };
 

@@ -2,11 +2,14 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useMenu/useAuth";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+
 
 const SignUp = () => {
     const { createUser, updateUserProfile } = useAuth();
     const location = useLocation()
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
 
     const {
         register,
@@ -23,7 +26,15 @@ const SignUp = () => {
                 // update user profile
                 updateUserProfile(data.name, data.photoUrl)
                     .then(() => {
-                        console.log('profile updated');
+                        // console.log('profile updated');
+                        const userInfo = {
+                            name: data.name?.displayName,
+                            email: data.email?.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(data => {
+                                console.log(data.data);
+                            })
                     })
                     .catch(err => {
                         console.log(err);
