@@ -21,20 +21,20 @@ const SignUp = () => {
     const onSubmit = data => {
         createUser(data.email, data.password)
             .then(() => {
-                Swal.fire("Create user success!");
-                navigate(location.state || '/')
                 // update user profile
                 updateUserProfile(data.name, data.photoUrl)
                     .then(() => {
                         // console.log('profile updated');
                         const userInfo = {
-                            name: data.name?.displayName,
-                            email: data.email?.email
+                            name: data?.name,
+                            email: data?.email
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(data => {
                                 console.log(data.data);
                             })
+                        Swal.fire("Create user success!");
+                        navigate(location.state || '/')
                     })
                     .catch(err => {
                         console.log(err);
