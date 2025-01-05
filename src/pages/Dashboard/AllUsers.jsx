@@ -25,7 +25,7 @@ const AllUsers = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                axiosSecure.delete(`/cart/${id}`)
+                axiosSecure.delete(`/user/${id}`)
                     .then(data => {
                         if (data.data.deletedCount > 0) {
                             Swal.fire({
@@ -39,6 +39,16 @@ const AllUsers = () => {
                     })
             }
         });
+    }
+
+    const handleMakeAdmin = id => {
+        axiosSecure.patch(`/user/admin/${id}`)
+            .then(data => {
+                if (data.data.modifiedCount > 0) {
+                    refetch();
+                    Swal.fire("Admin added")
+                }
+            })
     }
     return (
         <div>
@@ -64,11 +74,15 @@ const AllUsers = () => {
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>
-                                            <button
-                                            // onClick={() => handleMakeAdmin(user._id)}
-                                            >
-                                                <FaUsers className="text-xl text-green-600"></FaUsers>
-                                            </button>
+                                            {
+                                                user.role === "admin" ? 'Admin' : <>
+                                                    <button
+                                                        onClick={() => handleMakeAdmin(user._id)}
+                                                    >
+                                                        <FaUsers className="text-xl text-green-600"></FaUsers>
+                                                    </button>
+                                                </>
+                                            }
                                         </td>
                                         <td>
                                             <button

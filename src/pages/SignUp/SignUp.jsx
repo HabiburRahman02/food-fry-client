@@ -31,10 +31,12 @@ const SignUp = () => {
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(data => {
-                                console.log(data.data);
+                                console.log('user added to the db');
+                                if (data.data.insertedId) {
+                                    Swal.fire("Create user success!");
+                                    navigate(location.state || '/')
+                                }
                             })
-                        Swal.fire("Create user success!");
-                        navigate(location.state || '/')
                     })
                     .catch(err => {
                         console.log(err);
