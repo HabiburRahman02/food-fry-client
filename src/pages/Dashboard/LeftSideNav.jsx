@@ -1,7 +1,9 @@
 import { FaAd, FaBook, FaCalendar, FaHome, FaJediOrder, FaList, FaUsers } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import useAdmin from "../../hooks/useAdmin";
 const LeftSideNav = () => {
-    const isAdmin = true;
+    const [isAdmin] = useAdmin();
+    // const isAdmin = true
     return (
         <ul className="space-y-3">
             {
