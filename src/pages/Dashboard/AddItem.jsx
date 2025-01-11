@@ -3,6 +3,7 @@ import SectionTitle from "../../components/SectionTitle";
 import { FaUtensils } from "react-icons/fa";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const imgBb_api_key = 'b82c65a16ba89f715c90a69d27ebf2f6';
 
@@ -12,8 +13,7 @@ const AddItem = () => {
     const {
         register,
         handleSubmit,
-        watch,
-        formState: { errors },
+        // formState: { errors },
     } = useForm()
 
     const onSubmit = async (data) => {
@@ -27,14 +27,20 @@ const AddItem = () => {
             // send img url and other data in database
             const menu = {
                 name: data.name,
-                category: data.category,
-                price: data.category,
                 recipe: data.recipe,
-                image: res.data.data.display_url
+                image: res.data.data.display_url,
+                category: data.category,
+                price: parseFloat(data.price)
             }
-            console.log(menu);
-            const menuData = axiosSecure.post('/menu', menu);
-            console.log('menu data', menuData);
+            axiosSecure.post('/menu', menu)
+                .then(data => {
+                    if (data.data.insertedId) {
+                        Swal.fire({
+                            title: 'Add new menu item',
+                            timer: 1500
+                        })
+                    }
+                })
         }
     }
 
