@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 const LeftSideNav = () => {
     const [isAdmin] = useAdmin();
-    // const isAdmin = true
+
     return (
         <ul className="space-y-3">
             {
@@ -15,9 +15,9 @@ const LeftSideNav = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to='/dashboard/addItems' className='flex items-center gap-2'>
+                        <NavLink to='/dashboard/addItem' className='flex items-center gap-2'>
                             <FaAd></FaAd>
-                            Add Items
+                            Add Item
                         </NavLink>
                     </li>
                     <li>
