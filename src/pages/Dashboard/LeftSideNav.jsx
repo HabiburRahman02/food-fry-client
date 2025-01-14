@@ -1,8 +1,11 @@
 import { FaAd, FaBook, FaCalendar, FaHome, FaJediOrder, FaList, FaUsers } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
+import useCart from "../../hooks/useCart";
 const LeftSideNav = () => {
-    const [isAdmin] = useAdmin();
+    const [cart] = useCart();
+    // const [isAdmin] = useAdmin();
+    const isAdmin = false
 
     return (
         <ul className="space-y-3">
@@ -54,7 +57,7 @@ const LeftSideNav = () => {
                     <li>
                         <NavLink to='/dashboard/cart' className='flex items-center gap-2'>
                             <FaHome></FaHome>
-                            My Cart
+                            My Cart({cart.length})
                         </NavLink>
                     </li>
                     <li>

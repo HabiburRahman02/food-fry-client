@@ -3,26 +3,30 @@ import { useEffect, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useCart from "../../hooks/useCart";
 import useAuth from "../../hooks/useMenu/useAuth";
+import Swal from "sweetalert2";
 
 const CheckoutForm = () => {
     const [error, setError] = useState('');
     const [clientSecret, setClientSecret] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [transId, setTransId] = useState('');
     const stripe = useStripe();
     const elements = useElements();
-    const [cart] = useCart();
+    const [cart, refetch] = useCart();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const totalPrice = cart?.reduce((prevValue, currentValue) => {
         return prevValue + currentValue.price
     }, 0)
-
+    console.log(stripe, clientSecret);
     useEffect(() => {
-        axiosSecure.post('/create-payment-intent', { price: totalPrice })
-            .then(res => {
-                console.log(res.data.clientSecret)
-                setClientSecret(res.data.clientSecret)
-            })
+        if (totalPrice > 0) {
+            axiosSecure.post('/create-payment-intent', { price: totalPrice })
+                .then(res => {
+                    console.log(res.data.clientSecret)
+                    setClientSecret(res.data.clientSecret)
+                })
+        }
     }, [axiosSecure, totalPrice])
 
     const handleSubmit = async (e) => {
@@ -72,16 +76,44 @@ const CheckoutForm = () => {
             console.log('Payment Intent', paymentIntent);
             if (paymentIntent.status === 'succeeded') {
                 setTransId(paymentIntent.id);
+
+                // save the payment in the database
+                const payment = {
+                    email: user?.email,
+                    price: totalPrice,
+                    transId: paymentIntent.id,
+                    date: new Date(), //convert utc date
+                    cartIds: cart.map(item => item._id),
+                    foodItemIds: cart.map(item => item.food_id),
+                    status: 'pending'
+                }
+                axiosSecure.post('/payments', payment)
+                    .then(res => {
+                        console.log('payment save', res.data);
+                        if (res.data.paymentResult.insertedId) {
+                            Swal.fire('Payment success')
+                            refetch();
+                        }
+                    })
+
+
             }
         }
 
-
-
     }
+
+    const handleCardChange = (event) => {
+        if (event.complete) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit}>
             <CardElement
+                onChange={handleCardChange}
                 options={{
                     style: {
                         base: {
@@ -97,7 +129,9 @@ const CheckoutForm = () => {
                     },
                 }}
             />
-            <button className="btn btn-secondary btn-sm mt-4" type="submit" disabled={!stripe || !clientSecret}>
+            {/* disabled={!stripe || !clientSecret} */}
+
+            <button className="btn btn-secondary btn-sm mt-4" type="submit" disabled={!stripe || !clientSecret || isButtonDisabled}>
                 Pay
             </button>
             {error && <p className="text-red-500">{error}</p>}
