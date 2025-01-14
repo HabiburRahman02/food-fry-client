@@ -1,12 +1,29 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useCart from "../../hooks/useCart";
+import useAuth from "../../hooks/useMenu/useAuth";
 
 const CheckoutForm = () => {
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [clientSecret, setClientSecret] = useState('');
+    const [transId, setTransId] = useState('');
     const stripe = useStripe();
     const elements = useElements();
+    const [cart] = useCart();
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const totalPrice = cart?.reduce((prevValue, currentValue) => {
+        return prevValue + currentValue.price
+    }, 0)
 
+    useEffect(() => {
+        axiosSecure.post('/create-payment-intent', { price: totalPrice })
+            .then(res => {
+                console.log(res.data.clientSecret)
+                setClientSecret(res.data.clientSecret)
+            })
+    }, [axiosSecure, totalPrice])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,13 +45,37 @@ const CheckoutForm = () => {
         if (error) {
             console.log('Error', error);
             setError(error.message)
-            setSuccess('')
         }
         else {
             console.log('Payment Method', paymentMethod);
             setError('')
-            setSuccess('Payment Successfully');
         }
+
+        // confirm payment
+        const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    email: user?.email || 'anonymous',
+                    name: user?.displayName || 'anonymous'
+                }
+            }
+        })
+
+        if (confirmError) {
+            console.log('Confirm Error', confirmError);
+            if (confirmError) {
+                setError(confirmError.message)
+            }
+        }
+        else {
+            console.log('Payment Intent', paymentIntent);
+            if (paymentIntent.status === 'succeeded') {
+                setTransId(paymentIntent.id);
+            }
+        }
+
+
 
     }
 
@@ -56,11 +97,11 @@ const CheckoutForm = () => {
                     },
                 }}
             />
-            <button className="btn btn-secondary btn-sm mt-4" type="submit" disabled={!stripe}>
+            <button className="btn btn-secondary btn-sm mt-4" type="submit" disabled={!stripe || !clientSecret}>
                 Pay
             </button>
             {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
+            {transId && <p className="text-green-500">Trans Id: {transId}</p>}
         </form>
     );
 };
