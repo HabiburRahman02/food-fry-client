@@ -3,6 +3,7 @@ import SectionTitle from "../../components/SectionTitle";
 import useCart from "../../hooks/useCart";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
     const [cart, refetch] = useCart();
@@ -47,7 +48,9 @@ const Cart = () => {
                 <div className="flex justify-between">
                     <h3 className="text-3xl">Orders: {cart.length}</h3>
                     <h3 className="text-3xl">Total Price: ${totalPrice}</h3>
-                    <button className="btn">Pay</button>
+                    <Link to='/dashboard/payment'>
+                        <button className="btn">Pay</button>
+                    </Link>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="table">
